@@ -1,6 +1,7 @@
 package com.kscorp.kscatalog.services;
 
 import java.util.Optional;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kscorp.kscatalog.dto.CategoryDTO;
 import com.kscorp.kscatalog.dto.ProductDTO;
+import com.kscorp.kscatalog.entities.Category;
 import com.kscorp.kscatalog.entities.Product;
+import com.kscorp.kscatalog.repositories.CategoryRepository;
 import com.kscorp.kscatalog.repositories.ProductRepository;
 import com.kscorp.kscatalog.services.exceptions.DatabaseException;
 import com.kscorp.kscatalog.services.exceptions.ResourceNotFoundException;
@@ -23,6 +27,9 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAll(PageRequest pageRequest) {
 		Page<Product> list = repository.findAll(pageRequest);
@@ -37,15 +44,16 @@ public class ProductService {
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
-		//entity.setName(dto.getName());
+		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 	}
+	
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
 		Product entity = repository.getOne(id);
-		//entity.setName(dto.getName());
+		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 		}
@@ -65,4 +73,18 @@ public class ProductService {
 		}
 	}
 	
+	//Copiando DTO para entidades
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		entity.setDescription(dto.getDescription());
+		entity.setDate(dto.getDate());
+		entity.setImgUrl(dto.getImgUrl());
+		
+		entity.getCategories().clear();
+		for(CategoryDTO catDto: dto.getCategories()) {
+			Category category = categoryRepository.getOne(catDto.getId());
+			entity.getCategories().add(category);
+		}
+	}
 }
