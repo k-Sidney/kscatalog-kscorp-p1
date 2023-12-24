@@ -1,5 +1,8 @@
 package com.kscorp.kscatalog.dto;
 
+import com.kscorp.kscatalog.services.validation.UserInsertValid;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
 	private static final long serialVersionUID = 1L;
 
