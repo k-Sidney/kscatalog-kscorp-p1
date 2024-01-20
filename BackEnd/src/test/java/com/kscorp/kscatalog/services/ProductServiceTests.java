@@ -64,6 +64,9 @@ public class ProductServiceTests {
 		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product);
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+		
+		Mockito.when(repository.find(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(page);
+		
 		Mockito.when(repository.getOne(existingId)).thenReturn(product);
 		Mockito.when(categoryRepository.getOne(existingId)).thenReturn(category);
 		
@@ -112,14 +115,13 @@ public class ProductServiceTests {
 	}
 	
 	@Test
-	public void findAllageShouldReturnPage() {
+	public void findAllPageShouldReturnPage() {
 		
 		Pageable pageable = PageRequest.of(0, 10);
 		
-		Page<ProductDTO> result = service.findAllPaged(dependetId, null, pageable);
+		Page<ProductDTO> result = service.findAllPaged(0L, "", pageable);
 		
 		Assertions.assertNotNull(result);
-		Mockito.verify(repository).findAll(pageable);
 	}
 	
 	@Test
