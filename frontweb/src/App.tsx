@@ -1,9 +1,13 @@
-import './assets/styles/custom.scss';
-import './App.css';
+import Navbar from "./components/Navbar";
+import "./assets/styles/custom.scss";
+import "./App.css";
 
 function App() {
   return (
-    <h1>Hello KSCatalog</h1>
+    <>
+      <Navbar />
+      <h1>Hello KSCatalog</h1>
+    </>
   );
 }
 
