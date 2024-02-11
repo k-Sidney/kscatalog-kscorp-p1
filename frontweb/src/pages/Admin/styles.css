@@ -1,0 +1,17 @@
+.admin-continer {
+  display: flex;
+  flex-direction: column;
+}
+.admin-content {
+  padding: 20px;
+}
+
+@media (min-width: 1200px) {
+  .admin-continer {
+    flex-direction: row;
+  }
+
+  .admin-content{
+    flex: 1;
+  }
+}
