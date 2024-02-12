@@ -1,42 +1,52 @@
 import { ReactComponent as ArrowIcon } from "assets/images/arrow.svg";
 import ProductPrice from "components/ProductPrice";
-import {Link} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import './styles.css';
+import "./styles.css";
+import { Product } from "types/product";
+import axios from "axios";
+import { BASE_URL } from "util/requests";
+import { useEffect, useState } from "react";
+
+type UrlParams = {
+  productId: string;
+};
 
 const ProductDetails = () => {
+  const { productId } = useParams<UrlParams>();
+
+  const [product, setProduct] = useState<Product>();
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/products/${productId}`).then((response) => {
+      setProduct(response.data);
+    });
+  }, [productId]);
+
   return (
     <div className="product-details-container">
       <div className="base-card product-details-card">
         <Link to="/products">
-
-     
-        <div className="goback-container">
-          <ArrowIcon />
-          <h2>VOLTAR</h2>
-        </div>
+          <div className="goback-container">
+            <ArrowIcon />
+            <h2>VOLTAR</h2>
+          </div>
         </Link>
 
         <div className="row">
           <div className="col-xl-6">
             <div className="img-container">
-              <img
-                src="https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg"
-                alt="Nome do Produto"
-              />
+              <img src={product?.imgUrl} alt={product?.name} />
             </div>
             <div className="name-price-container">
-              <h1>Nome do Produto</h1>
-              <ProductPrice price={2345.67} />
+              <h1>{product?.name}</h1>
+              {product && <ProductPrice price={product?.price} />}
             </div>
           </div>
           <div className="col-xl-6">
             <div className="description-container">
               <h2>Desrição do produto</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus, vel.
-              </p>
+              <p>{product?.description}</p>
             </div>
           </div>
         </div>
