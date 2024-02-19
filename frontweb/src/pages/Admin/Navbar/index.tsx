@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import './styles.css';
-import { hasAnyRoles } from 'util/requests';
+import { hasAnyRoles } from 'util/auth';
 
 const Navbar = () => {
   return (
@@ -22,7 +22,7 @@ const Navbar = () => {
               <p>Usuários</p>
             </NavLink>
           </li>
-       )}
+        )}
       </ul>
     </nav>
   );
