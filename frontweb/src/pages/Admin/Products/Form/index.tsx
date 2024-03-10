@@ -4,27 +4,23 @@ import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
 import { AxiosRequestConfig } from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
+import CategoryBadge from '../CategoryBadge';
+import { Category } from 'types/category';
 
 type UrlParams = {
   productId: string;
 };
 
 const Form = () => {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-
-  const MyComponent = () => <Select options={options} />;
-
   const { productId } = useParams<UrlParams>();
 
   const IsEditing = productId !== 'create';
 
   const history = useHistory();
+
+  const [selectCategories, setSelectCategories] = useState<Category[]>([]);
 
   const {
     register,
@@ -32,6 +28,12 @@ const Form = () => {
     formState: { errors },
     setValue,
   } = useForm<Product>();
+
+  useEffect(() => {
+    requestBackend({ url: '/categories' }).then((response) => {
+      setSelectCategories(response.data.content);
+    });
+  }, []);
 
   useEffect(() => {
     if (IsEditing) {
@@ -98,23 +100,26 @@ const Form = () => {
 
               <div className="margin-bottom-30">
                 <Select
-                options={options}
-                classNamePrefix="product-crud-select"
-                isMulti
+                  options={selectCategories}
+                  classNamePrefix="product-crud-select"
+                  isMulti
+                  getOptionLabel={(category: Category) => category.name}
+                  getOptionValue={(category: Category) => String(category.id)}
                 />
               </div>
-
-              <input
-                {...register('price', {
-                  required: 'Campo Obrigatório',
-                })}
-                type="text"
-                className={`form-control base-input ${
-                  errors.name ? 'is-invalid' : ''
-                }`}
-                placeholder="Preço"
-                name="price"
-              />
+              <div className="margin-bottom-30">
+                <input
+                  {...register('price', {
+                    required: 'Campo Obrigatório',
+                  })}
+                  type="text"
+                  className={`form-control base-input ${
+                    errors.name ? 'is-invalid' : ''
+                  }`}
+                  placeholder="Preço"
+                  name="price"
+                />
+              </div>
               <div className="invalid-feedback d-block">
                 {errors.price?.message}
               </div>
