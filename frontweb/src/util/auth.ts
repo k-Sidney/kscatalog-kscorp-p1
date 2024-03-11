@@ -1,4 +1,5 @@
-import { jwtDecode } from 'jwt-decode';
+
+import jwtDecode from 'jwt-decode';
 import { getAuthData } from './storage';
 
 export type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';

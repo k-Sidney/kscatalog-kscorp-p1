@@ -1,13 +1,13 @@
-import { useForm } from 'react-hook-form';
-import './styles.css';
+import { AxiosRequestConfig } from 'axios';
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { useHistory, useParams } from 'react-router-dom';
+import Select from 'react-select';
+import { Category } from 'types/category';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
-import { AxiosRequestConfig } from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Select from 'react-select';
-import CategoryBadge from '../CategoryBadge';
-import { Category } from 'types/category';
+
+import './styles.css';
 
 type UrlParams = {
   productId: string;
@@ -27,6 +27,7 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
   } = useForm<Product>();
 
   useEffect(() => {
@@ -52,10 +53,7 @@ const Form = () => {
   const onSubmit = (formData: Product) => {
     const data = {
       ...formData,
-      imgUrl: IsEditing
-        ? formData.imgUrl
-        : 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg',
-      categories: IsEditing ? formData.categories : [{ id: 1, name: '' }],
+      price: String(formData.price).replace(',', '.'),
     };
 
     const config: AxiosRequestConfig = {
@@ -99,14 +97,30 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
-                <Select
-                  options={selectCategories}
-                  classNamePrefix="product-crud-select"
-                  isMulti
-                  getOptionLabel={(category: Category) => category.name}
-                  getOptionValue={(category: Category) => String(category.id)}
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={selectCategories}
+                      classNamePrefix="product-crud-select"
+                      isMulti
+                      getOptionLabel={(category: Category) => category.name}
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                    />
+                  )}
                 />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
+                    Campo Obrigatório
+                  </div>
+                )}
               </div>
+
               <div className="margin-bottom-30">
                 <input
                   {...register('price', {
@@ -125,6 +139,28 @@ const Form = () => {
               </div>
             </div>
           </div>
+
+          <div className="margin-bottom-30">
+            <input
+              {...register('imgUrl', {
+                required: 'Campo Obrigatório',
+                pattern: {
+                  value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
+                  message: 'Deve ser uma URL válida',
+                },
+              })}
+              type="text"
+              className={`form-control base-input ${
+                errors.name ? 'is-invalid' : ''
+              }`}
+              placeholder="URL da imagem do produto"
+              name="imgUrl"
+            />
+            <div className="invalid-feedback d-block">
+              {errors.imgUrl?.message}
+            </div>
+          </div>
+
           <div className="col-lg-6">
             <div>
               <textarea
