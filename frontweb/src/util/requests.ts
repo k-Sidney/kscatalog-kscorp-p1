@@ -6,8 +6,8 @@ import { getAuthData } from './storage';
 export const BASE_URL =
   process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:8080';
 
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'kscatalog';
-const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET ?? 'kscatalog123';
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'dscatalog';
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET ?? 'dscatalog123';
 
 type LoginData = {
   username: string;
@@ -45,17 +45,22 @@ export const requestBackend = (config: AxiosRequestConfig) => {
   return axios({ ...config, baseURL: BASE_URL, headers });
 };
 
+// Add a request interceptor
 axios.interceptors.request.use(
   function (config) {
+    //
     return config;
   },
   function (error) {
+    //
     return Promise.reject(error);
   }
 );
 
+// Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
+    //
     return response;
   },
   function (error) {

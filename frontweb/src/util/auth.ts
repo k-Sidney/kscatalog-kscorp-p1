@@ -1,4 +1,3 @@
-
 import jwtDecode from 'jwt-decode';
 import { getAuthData } from './storage';
 
@@ -19,7 +18,7 @@ export const getTokenData = (): TokenData | undefined => {
 };
 
 export const isAuthenticated = (): boolean => {
-  const tokenData = getTokenData();
+  let tokenData = getTokenData();
   return tokenData && tokenData.exp * 1000 > Date.now() ? true : false;
 };
 
@@ -36,10 +35,7 @@ export const hasAnyRoles = (roles: Role[]): boolean => {
         return true;
       }
     }
-
-    // if (tokenData !== undefined) {
-    //   return roles.some((role) => tokenData.authorities.includes(role));
-    //  }
+    //return roles.some(role => tokenData.authorities.includes(role));
   }
 
   return false;

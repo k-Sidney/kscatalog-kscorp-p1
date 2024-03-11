@@ -1,14 +1,16 @@
-import { AuthContext } from 'AuthContext';
 import './styles.css';
 import 'bootstrap/js/src/collapse.js';
-import { useEffect, useContext } from 'react';
 
 import { Link, NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 import history from 'util/history';
+import { useContext } from 'react';
+import { AuthContext } from 'AuthContext';
 import { getTokenData, isAuthenticated } from 'util/auth';
 import { removeAuthData } from 'util/storage';
 
 const Navbar = () => {
+
   const { authContextData, setAuthContextData } = useContext(AuthContext);
 
   useEffect(() => {
@@ -36,9 +38,8 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary main-nav">
       <div className="container-fluid">
-        {/* previne quebra de linha entre logo e itens */}
         <Link to="/" className="nav-logo-text">
-          <h4>KS Catalog</h4>
+          <h4>DS Catalog</h4>
         </Link>
         <button
           className="navbar-toggler"
@@ -74,9 +75,7 @@ const Navbar = () => {
         <div className="nav-login-logout">
           {authContextData.authenticated ? (
             <>
-              <span className="nav-username">
-                {authContextData.tokenData?.user_name}
-              </span>
+              <span className="nav-username">{authContextData.tokenData?.user_name}</span>
               <a href="#logout" onClick={handleLogoutClick}>
                 LOGOUT
               </a>
