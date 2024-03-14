@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Product } from 'types/product';
 import { Category } from 'types/category';
 import { requestBackend } from 'util/requests';
@@ -7,16 +7,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-
 import './styles.css';
-
 
 type UrlParams = {
   productId: string;
 };
 
 const Form = () => {
-
   const { productId } = useParams<UrlParams>();
 
   const isEditing = productId !== 'create';
@@ -30,16 +27,14 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
   } = useForm<Product>();
 
-
   useEffect(() => {
-    requestBackend({url: '/categories'})
-    .then(response => {
+    requestBackend({ url: '/categories' }).then((response) => {
       setSelectCategories(response.data.content);
-    })
-  },[]);
-
+    });
+  }, []);
 
   useEffect(() => {
     if (isEditing) {
@@ -105,29 +100,30 @@ const Form = () => {
                 </div>
               </div>
 
-
-
-
-
               <div className="margin-bottom-30">
-              <Select
-              options={selectCategories}
-              classNamePrefix={"product-crud-select"}
-              isMulti
-              getOptionLabel={(category: Category) => category.name}
-              getOptionValue={(category: Category) => String(category.id)}
-              />
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={selectCategories}
+                      classNamePrefix={'product-crud-select'}
+                      isMulti
+                      getOptionLabel={(category: Category) => category.name}
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                    />
+                  )}
+                />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
+                    Campo obrigatório
+                  </div>
+                )}
               </div>
-
-
-
-
-
-
-
-
-
-
 
               <div className="margin-bottom-30">
                 <input
