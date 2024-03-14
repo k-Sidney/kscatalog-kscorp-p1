@@ -1,12 +1,13 @@
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
-
-import './styles.css';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { SpringPage } from 'types/vendor/spring';
 import { Product } from 'types/product';
 import { AxiosRequestConfig } from 'axios';
 import { requestBackend } from 'util/requests';
+import Pagination from 'components/Pagination';
+
+import './styles.css';
 
 const List = () => {
   const [page, setPage] = useState<SpringPage<Product>>();
@@ -48,6 +49,7 @@ const List = () => {
           </div>
         ))}
       </div>
+      <Pagination/>
     </div>
   );
 };
