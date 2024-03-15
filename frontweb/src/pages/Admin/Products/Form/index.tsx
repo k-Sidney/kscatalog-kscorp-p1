@@ -5,6 +5,7 @@ import { requestBackend } from 'util/requests';
 import { AxiosRequestConfig } from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import CurrencyInput from 'react-currency-input-field';
 import Select from 'react-select';
 
@@ -65,7 +66,11 @@ const Form = () => {
     };
 
     requestBackend(config).then(() => {
+      toast.info("Produto cadastrado com sucesso");
       history.push('/admin/products');
+    })
+    .catch(() => {
+      toast.error("Erro ao cadastrar produto");
     });
   };
 
