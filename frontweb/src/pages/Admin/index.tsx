@@ -14,7 +14,6 @@ const Admin = () => {
       <div className="admin-content">
         <Switch>
           <PrivateRoute path="/admin/products">
-            <Products />
           </PrivateRoute>
           <PrivateRoute path="/admin/categories">
             <h1>Category CRUD</h1>
