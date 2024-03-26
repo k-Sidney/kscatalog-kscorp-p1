@@ -6,6 +6,7 @@ import PrivateRoute from 'components/PrivateRoute';
 import './styles.css';
 import Products from './Products';
 
+
 const Admin = () => {
   return (
     <div className="admin-container">
