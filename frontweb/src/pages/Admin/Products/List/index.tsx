@@ -1,12 +1,13 @@
-import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
-import { Link } from 'react-router-dom';
-import { useCallback, useEffect, useState } from 'react';
-import { SpringPage } from 'types/vendor/spring';
-import { Product } from 'types/product';
 import { AxiosRequestConfig } from 'axios';
-import { requestBackend } from 'util/requests';
 import Pagination from 'components/Pagination';
 import ProductFilter, { ProductFilterData } from 'components/ProductFilter';
+import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
+import { useCallback } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Product } from 'types/product';
+import { SpringPage } from 'types/vendor/spring';
+import { requestBackend } from 'util/requests';
 
 import './styles.css';
 
@@ -29,7 +30,7 @@ const List = () => {
   };
 
   const handleSubmitFilter = (data: ProductFilterData) => {
-    setControlComponentsData({ activePage: 0, filterData: data});
+    setControlComponentsData({ activePage: 0, filterData: data });   
   };
 
   const getProducts = useCallback(() => {
@@ -63,15 +64,10 @@ const List = () => {
         </Link>
         <ProductFilter onSubmitFilter={handleSubmitFilter} />
       </div>
-      <div className="row ">
+      <div className="row">
         {page?.content.map((product) => (
           <div key={product.id} className="col-sm-6 col-md-12">
-            <ProductCrudCard
-              product={product}
-              onDelete={() => {
-                getProducts();
-              }}
-            />
+            <ProductCrudCard product={product} onDelete={getProducts} />
           </div>
         ))}
       </div>

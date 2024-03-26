@@ -1,13 +1,14 @@
-import { useForm, Controller } from 'react-hook-form';
-import { Product } from 'types/product';
-import { Category } from 'types/category';
-import { requestBackend } from 'util/requests';
 import { AxiosRequestConfig } from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import CurrencyInput from 'react-currency-input-field';
+import { useForm, Controller } from 'react-hook-form';
+import { useHistory, useParams } from 'react-router-dom';
 import Select from 'react-select';
+import { Category } from 'types/category';
+import { Product } from 'types/product';
+import { requestBackend } from 'util/requests';
+import { toast } from 'react-toastify';
 
 import './styles.css';
 
@@ -61,16 +62,17 @@ const Form = () => {
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
-      data: data,
+      data,
       withCredentials: true,
     };
 
-    requestBackend(config).then(() => {
-      toast.info("Produto cadastrado com sucesso");
+    requestBackend(config)
+    .then(() => {
+      toast.info('Produto cadastrado com sucesso');
       history.push('/admin/products');
     })
     .catch(() => {
-      toast.error("Erro ao cadastrar produto");
+      toast.error('Erro ao cadastrar produto');
     });
   };
 
@@ -83,7 +85,7 @@ const Form = () => {
       <div className="base-card product-crud-form-card">
         <h1 className="product-crud-form-title">DADOS DO PRODUTO</h1>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} data-testid="form">
           <div className="row product-crud-inputs-container">
             <div className="col-lg-6 product-crud-inputs-left-container">
               <div className="margin-bottom-30">
@@ -95,15 +97,17 @@ const Form = () => {
                   className={`form-control base-input ${
                     errors.name ? 'is-invalid' : ''
                   }`}
-                  placeholder="Nome do Produto"
+                  placeholder="Nome do produto"
                   name="name"
+                  data-testid="name"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.name?.message}
                 </div>
               </div>
 
-              <div className="margin-bottom-30">
+              <div className="margin-bottom-30 ">
+                <label htmlFor="categories" className="d-none">Categorias</label>
                 <Controller
                   name="categories"
                   rules={{ required: true }}
@@ -112,12 +116,13 @@ const Form = () => {
                     <Select
                       {...field}
                       options={selectCategories}
-                      classNamePrefix={'product-crud-select'}
+                      classNamePrefix="product-crud-select"
                       isMulti
                       getOptionLabel={(category: Category) => category.name}
                       getOptionValue={(category: Category) =>
                         String(category.id)
                       }
+                      inputId="categories"
                     />
                   )}
                 />
@@ -142,6 +147,7 @@ const Form = () => {
                       disableGroupSeparators={true}
                       value={field.value}
                       onValueChange={field.onChange}
+                      data-testid="price"
                     />
                   )}
                 />
@@ -163,8 +169,9 @@ const Form = () => {
                   className={`form-control base-input ${
                     errors.name ? 'is-invalid' : ''
                   }`}
-                  placeholder="Url da imagem do produto"
+                  placeholder="URL da imagem do produto"
                   name="imgUrl"
+                  data-testid="imgUrl"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.imgUrl?.message}
@@ -183,22 +190,22 @@ const Form = () => {
                   }`}
                   placeholder="Descrição"
                   name="description"
-                ></textarea>
+                  data-testid="description"
+                />
                 <div className="invalid-feedback d-block">
-                  {errors.price?.message}
+                  {errors.description?.message}
                 </div>
               </div>
             </div>
           </div>
-
           <div className="product-crud-buttons-container">
             <button
-              className="btn btn-outline-danger product-crud-button "
+              className="btn btn-outline-danger product-crud-button"
               onClick={handleCancel}
             >
               CANCELAR
             </button>
-            <button className="btn btn-outline-primary product-crud-button text-white bg-azul">
+            <button className="btn btn-primary product-crud-button text-white">
               SALVAR
             </button>
           </div>
