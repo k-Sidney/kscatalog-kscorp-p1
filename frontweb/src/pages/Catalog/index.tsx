@@ -32,7 +32,7 @@ const Catalog = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }
 
   useEffect(() => {
     getProducts(0);
@@ -50,7 +50,7 @@ const Catalog = () => {
         ) : (
           page?.content.map((product) => (
             <div className="col-sm-6 col-lg-4 col-xl-3" key={product.id}>
-              <Link to="/products/1">
+              <Link to={`/products/${product.id}`}>
                 <ProductCard product={product} />
               </Link>
             </div>
@@ -59,9 +59,9 @@ const Catalog = () => {
       </div>
 
       <div className="row">
-        <Pagination
-          pageCount={page ? page.totalPages : 0}
-          range={3}
+        <Pagination 
+          pageCount={page ? page.totalPages : 0} 
+          range={3} 
           onChange={getProducts}
         />
       </div>

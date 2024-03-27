@@ -1,8 +1,8 @@
 import { ReactComponent as SearchIcon } from 'assets/images/search-icon.svg';
-import { Category } from 'types/category';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
-import { useEffect, useState } from 'react';
+import { Category } from 'types/category';
 import { requestBackend } from 'util/requests';
 
 import './styles.css';
@@ -33,10 +33,12 @@ const ProductFilter = ({ onSubmitFilter }: Props) => {
 
   const handleChangeCategory = (value: Category) => {
     setValue('category', value);
+
     const obj: ProductFilterData = {
       name: getValues('name'),
       category: getValues('category'),
     };
+
     onSubmitFilter(obj);
   };
 
@@ -54,7 +56,7 @@ const ProductFilter = ({ onSubmitFilter }: Props) => {
             {...register('name')}
             type="text"
             className="form-control"
-            placeholder="Nome do Produto"
+            placeholder="Nome do produto"
             name="name"
           />
           <button className="product-filter-search-icon">
@@ -72,7 +74,7 @@ const ProductFilter = ({ onSubmitFilter }: Props) => {
                   options={selectCategories}
                   isClearable
                   placeholder="Categoria"
-                  classNamePrefix={'product-filter-select'}
+                  classNamePrefix="product-filter-select"
                   onChange={(value) => handleChangeCategory(value as Category)}
                   getOptionLabel={(category: Category) => category.name}
                   getOptionValue={(category: Category) => String(category.id)}
@@ -80,12 +82,11 @@ const ProductFilter = ({ onSubmitFilter }: Props) => {
               )}
             />
           </div>
-
           <button
             onClick={handleFormClear}
             className="btn btn-outline-secondary btn-product-filter-clear"
           >
-            LIMPAR<span className="btn-product-filter-word"> FILTRO </span>
+            LIMPAR<span className="btn-product-filter-word"> FILTRO</span>
           </button>
         </div>
       </form>
