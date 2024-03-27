@@ -5,7 +5,8 @@ import PrivateRoute from 'components/PrivateRoute';
 
 
 import './styles.css';
-import Products from './Products';
+import Products2 from './Products';
+
 
 const Admin = () => {
   return (
@@ -14,7 +15,7 @@ const Admin = () => {
       <div className="admin-content">
         <Switch>
           <PrivateRoute path="/admin/products">
-            <Products />
+            <Products2 />
           </PrivateRoute>
           <PrivateRoute path="/admin/categories">
             <h1>Category CRUD</h1>
