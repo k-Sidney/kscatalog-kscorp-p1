@@ -3,7 +3,7 @@ import Form from "./Form";
 import List from "./List";
 
 
-const Products = () => {
+const Products2 = () => {
 
     return (
         <Switch>
@@ -17,4 +17,4 @@ const Products = () => {
     )
 }
 
-export default Products;
+export default Products2;
