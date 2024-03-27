@@ -57,7 +57,7 @@ axios.interceptors.request.use(
   }
 );
 
-// AAdd a response interceptor
+// Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
     //
